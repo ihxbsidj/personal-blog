@@ -1,0 +1,82 @@
+<%- include('../partials/header') %>
+
+<div class="mb-4">
+  <a href="/github/repos/<%= owner %>/<%= repo %>" class="btn btn-outline-secondary">
+    <i class="bi bi-arrow-left"></i> 返回仓库详情
+  </a>
+</div>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="/github/repos/<%= owner %>/<%= repo %>/contents">
+        <i class="bi bi-folder"></i> <%= repo %>
+      </a>
+    </li>
+    <% if (path) { %>
+      <% 
+        const parts = path.split('/');
+        let currentPath = '';
+        parts.forEach((part, index) => {
+          currentPath += (index > 0 ? '/' : '') + part;
+      %>
+        <li class="breadcrumb-item <%= index === parts.length - 1 ? 'active' : '' %>">
+          <% if (index === parts.length - 1) { %>
+            <%= part %>
+          <% } else { %>
+            <a href="/github/repos/<%= owner %>/<%= repo %>/contents/<%= currentPath %>">
+              <%= part %>
+            </a>
+          <% } %>
+        </li>
+      <% }) %>
+    <% } %>
+  </ol>
+</nav>
+
+<div class="card">
+  <div class="card-header bg-dark text-white">
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">
+        <i class="bi bi-folder"></i> 
+        <%= path || repo %>
+      </h5>
+    </div>
+  </div>
+  <div class="card-body p-0">
+    <div class="list-group list-group-flush">
+      <% if (parentPath !== null) { %>
+        <a href="/github/repos/<%= owner %>/<%= repo %>/contents/<%= parentPath %>" class="list-group-item list-group-item-action">
+          <i class="bi bi-arrow-up"></i> ..
+        </a>
+      <% } %>
+      
+      <% if (contents && contents.length > 0) { %>
+        <% 
+          // 先显示目录，再显示文件
+          const directories = contents.filter(item => item.type === 'dir');
+          const files = contents.filter(item => item.type === 'file');
+          const sortedContents = [...directories, ...files];
+        %>
+        
+        <% sortedContents.forEach(item => { %>
+          <a href="/github/repos/<%= owner %>/<%= repo %>/contents/<%= item.path %>" 
+             class="list-group-item list-group-item-action">
+            <% if (item.type === 'dir') { %>
+              <i class="bi bi-folder text-primary"></i>
+            <% } else if (item.type === 'file') { %>
+              <i class="bi bi-file-text text-secondary"></i>
+            <% } %>
+            <%= item.name %>
+          </a>
+        <% }) %>
+      <% } else { %>
+        <div class="list-group-item">
+          <p class="mb-0">此目录为空</p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %> 

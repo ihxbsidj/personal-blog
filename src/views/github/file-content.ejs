@@ -1,0 +1,68 @@
+<%- include('../partials/header') %>
+
+<div class="mb-4">
+  <a href="/github/repos/<%= owner %>/<%= repo %>/contents/<%= parentPath %>" class="btn btn-outline-secondary">
+    <i class="bi bi-arrow-left"></i> 返回目录
+  </a>
+</div>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="/github/repos/<%= owner %>/<%= repo %>/contents">
+        <i class="bi bi-folder"></i> <%= repo %>
+      </a>
+    </li>
+    <% 
+      const parts = path.split('/');
+      let currentPath = '';
+      parts.forEach((part, index) => {
+        currentPath += (index > 0 ? '/' : '') + part;
+    %>
+      <li class="breadcrumb-item <%= index === parts.length - 1 ? 'active' : '' %>">
+        <% if (index === parts.length - 1) { %>
+          <%= part %>
+        <% } else { %>
+          <a href="/github/repos/<%= owner %>/<%= repo %>/contents/<%= currentPath %>">
+            <%= part %>
+          </a>
+        <% } %>
+      </li>
+    <% }) %>
+  </ol>
+</nav>
+
+<div class="card">
+  <div class="card-header bg-dark text-white">
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">
+        <i class="bi bi-file-text"></i> 
+        <%= file.name %>
+      </h5>
+      <a href="<%= file.html_url %>" target="_blank" class="btn btn-sm btn-outline-light">
+        <i class="bi bi-github"></i> 在GitHub上查看
+      </a>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="file-info mb-3">
+      <span class="badge bg-secondary me-2"><%= file.size %> 字节</span>
+      <% 
+        // 根据文件扩展名显示不同的标签
+        const ext = file.name.split('.').pop().toLowerCase();
+        let langClass = 'bg-secondary';
+        if (['js', 'ts', 'jsx', 'tsx'].includes(ext)) langClass = 'bg-warning';
+        if (['html', 'css', 'scss', 'less'].includes(ext)) langClass = 'bg-info';
+        if (['py', 'rb', 'php'].includes(ext)) langClass = 'bg-success';
+        if (['md', 'txt', 'json'].includes(ext)) langClass = 'bg-primary';
+      %>
+      <span class="badge <%= langClass %> me-2"><%= ext %></span>
+    </div>
+    
+    <div class="file-content border rounded p-3 bg-light">
+      <pre><code><%= content %></code></pre>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %> 

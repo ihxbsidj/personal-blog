@@ -1,0 +1,68 @@
+<%- include('../partials/header') %>
+
+<div class="mb-4">
+  <form action="/github/repos" method="GET" class="row g-3">
+    <div class="col-md-6">
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-github"></i></span>
+        <input type="text" class="form-control" id="username" name="username" 
+               placeholder="输入GitHub用户名" value="<%= locals.username || '' %>">
+        <button type="submit" class="btn btn-primary">查看仓库</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<% if (locals.error) { %>
+  <div class="alert alert-danger">
+    <%= error %>
+  </div>
+<% } %>
+
+<% if (locals.repos && repos.length > 0) { %>
+  <h3><i class="bi bi-github"></i> <%= username %> 的仓库列表</h3>
+  
+  <div class="row">
+    <% repos.forEach(repo => { %>
+      <div class="col-md-6 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="/github/repos/<%= repo.owner.login %>/<%= repo.name %>" class="text-decoration-none">
+                <%= repo.name %>
+              </a>
+            </h5>
+            <p class="card-text text-muted">
+              <small>
+                <i class="bi bi-calendar"></i> 
+                <%= new Date(repo.updated_at).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+              </small>
+            </p>
+            <p class="card-text">
+              <%= repo.description || '无描述' %>
+            </p>
+            <div class="d-flex gap-3">
+              <span><i class="bi bi-star"></i> <%= repo.stargazers_count %></span>
+              <span><i class="bi bi-diagram-2"></i> <%= repo.forks_count %></span>
+              <span><i class="bi bi-code-slash"></i> <%= repo.language || 'N/A' %></span>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent d-flex justify-content-between">
+            <a href="/github/repos/<%= repo.owner.login %>/<%= repo.name %>" class="btn btn-sm btn-primary">
+              <i class="bi bi-info-circle"></i> 详情
+            </a>
+            <a href="<%= repo.html_url %>" target="_blank" class="btn btn-sm btn-outline-secondary">
+              <i class="bi bi-github"></i> GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } else if (locals.username) { %>
+  <div class="alert alert-info">
+    <i class="bi bi-info-circle"></i> 未找到 <%= username %> 的仓库或该用户不存在。
+  </div>
+<% } %>
+
+<%- include('../partials/footer') %> 

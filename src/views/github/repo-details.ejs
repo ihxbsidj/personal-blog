@@ -1,0 +1,217 @@
+<%- include('../partials/header') %>
+
+<div class="mb-4">
+  <a href="/github/repos" class="btn btn-outline-secondary">
+    <i class="bi bi-arrow-left"></i> 返回仓库列表
+  </a>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header bg-dark text-white">
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">
+        <i class="bi bi-github"></i> 
+        <a href="<%= repository.html_url %>" target="_blank" class="text-white text-decoration-none">
+          <%= repository.full_name %>
+        </a>
+      </h5>
+      <span class="badge bg-light text-dark">
+        <i class="bi bi-star"></i> <%= repository.stargazers_count %>
+      </span>
+    </div>
+  </div>
+  <div class="card-body">
+    <p class="card-text"><%= repository.description || '无描述' %></p>
+    
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-code-slash"></i> 主要语言</span>
+            <span class="badge bg-primary rounded-pill"><%= repository.language || 'N/A' %></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-diagram-2"></i> 分支数</span>
+            <span class="badge bg-primary rounded-pill"><%= repository.forks_count %></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-eye"></i> 观察者</span>
+            <span class="badge bg-primary rounded-pill"><%= repository.watchers_count %></span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-calendar"></i> 创建时间</span>
+            <span><%= new Date(repository.created_at).toLocaleDateString('zh-CN') %></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-calendar-check"></i> 最后更新</span>
+            <span><%= new Date(repository.updated_at).toLocaleDateString('zh-CN') %></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-git"></i> 默认分支</span>
+            <span><%= repository.default_branch %></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="d-flex gap-2">
+      <a href="/github/repos/<%= repository.owner.login %>/<%= repository.name %>/contents" class="btn btn-primary">
+        <i class="bi bi-folder"></i> 浏览文件
+      </a>
+      <a href="<%= repository.html_url %>" target="_blank" class="btn btn-outline-dark">
+        <i class="bi bi-github"></i> 在GitHub上查看
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- 最近提交 -->
+<div class="card mb-4">
+  <div class="card-header bg-secondary text-white">
+    <h5 class="mb-0"><i class="bi bi-clock-history"></i> 最近提交</h5>
+  </div>
+  <div class="card-body p-0">
+    <div class="list-group list-group-flush">
+      <% if (commits && commits.length > 0) { %>
+        <% commits.forEach(commit => { %>
+          <div class="list-group-item">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1">
+                <a href="<%= commit.html_url %>" target="_blank" class="text-decoration-none">
+                  <%= commit.commit.message.split('\n')[0] %>
+                </a>
+              </h6>
+              <small class="text-muted">
+                <%= new Date(commit.commit.author.date).toLocaleString('zh-CN') %>
+              </small>
+            </div>
+            <p class="mb-1">
+              <small>
+                <i class="bi bi-person"></i> 
+                <%= commit.commit.author.name %>
+                <% if (commit.author) { %>
+                  (<a href="<%= commit.author.html_url %>" target="_blank">@<%= commit.author.login %></a>)
+                <% } %>
+              </small>
+            </p>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="list-group-item">
+          <p class="mb-0">暂无提交记录</p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<!-- GitHub Actions工作流 -->
+<div class="card mb-4">
+  <div class="card-header bg-info text-white">
+    <h5 class="mb-0"><i class="bi bi-gear"></i> GitHub Actions工作流</h5>
+  </div>
+  <div class="card-body">
+    <% if (workflows && workflows.length > 0) { %>
+      <div class="list-group">
+        <% workflows.forEach(workflow => { %>
+          <div class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1"><%= workflow.name %></h6>
+              <small class="text-<%= workflow.state === 'active' ? 'success' : 'secondary' %>">
+                <%= workflow.state === 'active' ? '活跃' : '非活跃' %>
+              </small>
+            </div>
+            <p class="mb-1"><small><%= workflow.path %></small></p>
+            <div class="mt-2">
+              <button class="btn btn-sm btn-primary trigger-deploy" 
+                      data-owner="<%= repository.owner.login %>" 
+                      data-repo="<%= repository.name %>" 
+                      data-workflow-id="<%= workflow.id %>">
+                <i class="bi bi-play"></i> 触发部署
+              </button>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> 未找到GitHub Actions工作流。
+      </div>
+      <p>要设置GitHub Actions自动部署到Azure，请按照以下步骤操作：</p>
+      <ol>
+        <li>在仓库中创建<code>.github/workflows/azure-deploy.yml</code>文件</li>
+        <li>配置工作流以部署到Azure Web App</li>
+        <li>设置必要的GitHub Secrets（如Azure发布配置文件）</li>
+      </ol>
+      <a href="https://docs.github.com/cn/actions/deployment/deploying-to-azure/deploying-to-azure-app-service" target="_blank" class="btn btn-info">
+        <i class="bi bi-book"></i> 查看文档
+      </a>
+    <% } %>
+  </div>
+</div>
+
+<!-- 部署状态模态框 -->
+<div class="modal fade" id="deployStatusModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">部署状态</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="deployStatus">
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">加载中...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 触发部署
+    const deployButtons = document.querySelectorAll('.trigger-deploy');
+    deployButtons.forEach(button => {
+      button.addEventListener('click', async function() {
+        const owner = this.dataset.owner;
+        const repo = this.dataset.repo;
+        const workflowId = this.dataset.workflowId;
+        
+        try {
+          const response = await fetch(`/github/deploy/${owner}/${repo}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ workflow_id: workflowId })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            alert('部署已触发！');
+            // 这里可以添加查询部署状态的逻辑
+          } else {
+            alert(`触发部署失败: ${data.message}`);
+          }
+        } catch (error) {
+          console.error('触发部署出错:', error);
+          alert('触发部署时发生错误，请查看控制台获取详情。');
+        }
+      });
+    });
+  });
+</script>
+
+<%- include('../partials/footer') %> 

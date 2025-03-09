@@ -1,0 +1,32 @@
+name: 部署到Azure Web App
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: 设置Node.js环境
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16.x'
+
+    - name: 安装依赖
+      run: npm ci
+
+    - name: 构建应用
+      run: |
+        npm run build --if-present
+        
+    - name: 部署到Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: . 

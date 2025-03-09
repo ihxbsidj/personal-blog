@@ -1,0 +1,14 @@
+<%- include('partials/header') %>
+
+<div class="alert alert-success">
+  <h4 class="alert-heading"><i class="bi bi-check-circle"></i> 操作成功</h4>
+  <p><%= message %></p>
+</div>
+
+<div class="text-center mt-4">
+  <a href="<%= redirectUrl %>" class="btn btn-primary">
+    <%= redirectText %>
+  </a>
+</div>
+
+<%- include('partials/footer') %> 

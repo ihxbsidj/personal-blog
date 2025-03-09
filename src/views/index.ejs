@@ -1,0 +1,61 @@
+<%- include('partials/header') %>
+
+<div class="jumbotron bg-light p-5 rounded-3 mb-4">
+  <h1 class="display-4">欢迎来到我的个人博客</h1>
+  <p class="lead">这是一个基于Node.js的个人博客系统，支持GitHub集成和Azure自动部署。</p>
+  <hr class="my-4">
+  <p>您可以浏览我的博客文章，或者查看我的GitHub仓库。</p>
+  <div class="d-flex gap-2">
+    <a class="btn btn-primary btn-lg" href="/blog" role="button">
+      <i class="bi bi-journal-text"></i> 浏览博客
+    </a>
+    <a class="btn btn-secondary btn-lg" href="/github/repos" role="button">
+      <i class="bi bi-github"></i> GitHub仓库
+    </a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="card-title mb-0"><i class="bi bi-journal-text"></i> 最新博客文章</h5>
+      </div>
+      <div class="card-body">
+        <p class="card-text">查看我最近发布的博客文章。</p>
+        <a href="/blog" class="btn btn-outline-primary">查看所有文章</a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header bg-secondary text-white">
+        <h5 class="card-title mb-0"><i class="bi bi-github"></i> GitHub集成</h5>
+      </div>
+      <div class="card-body">
+        <p class="card-text">浏览我的GitHub仓库，并通过GitHub Actions部署到Azure。</p>
+        <a href="/github/repos" class="btn btn-outline-secondary">查看GitHub仓库</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header bg-info text-white">
+    <h5 class="card-title mb-0"><i class="bi bi-info-circle"></i> 关于本站</h5>
+  </div>
+  <div class="card-body">
+    <p>这个博客系统使用以下技术构建：</p>
+    <ul>
+      <li>Node.js 和 Express.js 作为后端框架</li>
+      <li>EJS 作为模板引擎</li>
+      <li>MongoDB 作为数据库（可选）</li>
+      <li>GitHub API 集成</li>
+      <li>GitHub Actions 用于自动部署</li>
+      <li>Azure Web App 作为托管平台</li>
+    </ul>
+  </div>
+</div>
+
+<%- include('partials/footer') %> 
