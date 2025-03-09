@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+
+<div class="alert alert-danger">
+  <h4 class="alert-heading"><i class="bi bi-exclamation-triangle"></i> <%= message %></h4>
+  <% if (process.env.NODE_ENV === 'development' && error.stack) { %>
+    <hr>
+    <pre class="mb-0"><%= error.stack %></pre>
+  <% } %>
+</div>
+
+<div class="text-center mt-4">
+  <a href="/" class="btn btn-primary">
+    <i class="bi bi-house-door"></i> 返回首页
+  </a>
+</div>
+
+<%- include('partials/footer') %> 

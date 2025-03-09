@@ -1,0 +1,47 @@
+<%- include('../partials/header') %>
+
+<div class="mb-4">
+  <a href="/blog" class="btn btn-outline-secondary">
+    <i class="bi bi-arrow-left"></i> 返回博客列表
+  </a>
+</div>
+
+<article class="blog-post">
+  <h2 class="blog-post-title"><%= post.title %></h2>
+  <p class="blog-post-meta text-muted">
+    <i class="bi bi-calendar"></i> 
+    <%= new Date(post.createdAt).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+    <% if (post.author) { %>
+      <span class="ms-2">
+        <i class="bi bi-person"></i> <%= post.author %>
+      </span>
+    <% } %>
+    <% if (post.tags && post.tags.length > 0) { %>
+      <span class="ms-2">
+        <i class="bi bi-tags"></i> 
+        <% post.tags.forEach((tag, index) => { %>
+          <span class="badge bg-secondary"><%= tag %></span>
+        <% }) %>
+      </span>
+    <% } %>
+  </p>
+  
+  <hr>
+  
+  <div class="blog-post-content">
+    <%= post.content %>
+  </div>
+</article>
+
+<div class="mt-4 d-flex gap-2">
+  <a href="/blog/<%= post._id %>/edit" class="btn btn-primary">
+    <i class="bi bi-pencil"></i> 编辑文章
+  </a>
+  <form action="/blog/<%= post._id %>/delete" method="POST" class="d-inline">
+    <button type="submit" class="btn btn-danger" onclick="return confirm('确定要删除这篇文章吗？')">
+      <i class="bi bi-trash"></i> 删除文章
+    </button>
+  </form>
+</div>
+
+<%- include('../partials/footer') %> 

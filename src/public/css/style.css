@@ -1,0 +1,105 @@
+/* 全局样式 */
+body {
+  font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* 导航栏样式 */
+.navbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+  font-weight: bold;
+}
+
+/* 页脚样式 */
+footer {
+  border-top: 1px solid #eee;
+}
+
+/* 卡片样式 */
+.card {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  font-weight: bold;
+}
+
+/* 博客文章样式 */
+.blog-post {
+  margin-bottom: 2rem;
+}
+
+.blog-post-title {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.blog-post-meta {
+  margin-bottom: 1.25rem;
+  color: #6c757d;
+}
+
+.blog-post-content {
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+/* 文件内容样式 */
+.file-content {
+  max-height: 600px;
+  overflow-y: auto;
+  font-family: Consolas, Monaco, 'Andale Mono', monospace;
+  font-size: 0.9rem;
+}
+
+.file-content pre {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* 按钮样式 */
+.btn {
+  border-radius: 4px;
+}
+
+.btn-primary {
+  background-color: #1976d2;
+  border-color: #1976d2;
+}
+
+.btn-primary:hover {
+  background-color: #1565c0;
+  border-color: #1565c0;
+}
+
+/* 面包屑导航 */
+.breadcrumb {
+  background-color: #f8f9fa;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .jumbotron {
+    padding: 2rem 1rem;
+  }
+  
+  .card-deck {
+    display: block;
+  }
+  
+  .card {
+    margin-bottom: 1rem;
+  }
+} 

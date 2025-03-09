@@ -1,0 +1,42 @@
+<%- include('../partials/header') %>
+
+<div class="mb-4">
+  <a href="/blog" class="btn btn-outline-secondary">
+    <i class="bi bi-arrow-left"></i> 返回博客列表
+  </a>
+</div>
+
+<% if (locals.error) { %>
+  <div class="alert alert-danger">
+    <%= error %>
+  </div>
+<% } %>
+
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    <h5 class="card-title mb-0"><i class="bi bi-plus-circle"></i> 创建新博客文章</h5>
+  </div>
+  <div class="card-body">
+    <form action="/blog" method="POST">
+      <div class="mb-3">
+        <label for="title" class="form-label">标题</label>
+        <input type="text" class="form-control" id="title" name="title" required 
+               value="<%= locals.post ? post.title : '' %>">
+      </div>
+      <div class="mb-3">
+        <label for="content" class="form-label">内容</label>
+        <textarea class="form-control" id="content" name="content" rows="10" required><%= locals.post ? post.content : '' %></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="tags" class="form-label">标签（可选，用逗号分隔）</label>
+        <input type="text" class="form-control" id="tags" name="tags" 
+               value="<%= locals.post && post.tags ? post.tags.join(',') : '' %>">
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-save"></i> 保存文章
+      </button>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %> 
